@@ -44,54 +44,75 @@ body {
   background-attachment: fixed;
 }
 
-/* ===== 页面容器（上下滑动） ===== */
-.page-container {
+/* ===== 单页左右对称布局 ===== */
+.main-stage {
   width: 100%;
   height: 100vh;
-  overflow-y: auto;
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
-}
-.page-container::-webkit-scrollbar { width: 0; }
-
-.page {
-  width: 100%;
-  height: 100vh;
-  scroll-snap-align: start;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  gap: 48px;
+  padding: 20px 40px;
+  overflow: hidden;
 }
 
-.page-inner {
+.stage-column {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-  padding: 20px;
-  max-width: 100vw;
+  gap: 20px;
+  flex-shrink: 0;
 }
 
-/* 顶部小标识 */
-.page-tag {
+.stage-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 醒目标签徽章 */
+.stage-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 18px;
-  background: rgba(255, 159, 67, 0.12);
-  border: 1px solid rgba(255, 159, 67, 0.25);
+  padding: 8px 20px;
   border-radius: 999px;
-  color: var(--primary);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
-.page-tag .material-icons { font-size: 16px; }
+.stage-badge .material-icons { font-size: 18px; }
+.badge-interactive {
+  background: linear-gradient(135deg, rgba(255, 159, 67, 0.18), rgba(255, 183, 77, 0.12));
+  border: 1.5px solid rgba(255, 159, 67, 0.35);
+  color: var(--primary-dark);
+}
+.badge-recording {
+  background: linear-gradient(135deg, rgba(124, 179, 66, 0.15), rgba(139, 195, 74, 0.1));
+  border: 1.5px solid rgba(124, 179, 66, 0.3);
+  color: #558B2F;
+}
+
+/* 标题与说明 */
+.stage-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+.stage-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 300px;
+}
 
 /* ===== 手机外框（复用录屏 HTML 样式） ===== */
 .phone-frame {
   position: relative;
-  width: min(84vw, 360px);
+  width: min(38vw, 340px);
   aspect-ratio: 9 / 19.5;
   background: #0D0D0E;
   border-radius: 54px;
@@ -342,8 +363,16 @@ body {
   height: 100%;
 }
 .cat-fallback { z-index: 2; }
+/* 双 video 交替播放：A/B 两个 video 元素叠在同一位置 */
 .cat-video { z-index: 3; opacity: 0; }
 .cat-video.ready { opacity: 1; }
+.cat-video-a, .cat-video-b {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* 视频径向渐变边缘柔化 —— 对齐 APP 端 CatVideo.kt 的 Brush.radialGradient
  * APP 端: 4 色均匀分布 (0%/33%/66%/100%)，圆形渐变，中心 0%-66% 完全透明
@@ -1449,25 +1478,8 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* ===== 滚动提示 ===== */
-.scroll-hint {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--text-secondary);
-  font-size: 13px;
-  opacity: 0.7;
-  animation: bounce 2s ease-in-out infinite;
-}
-.scroll-hint .material-icons { font-size: 18px; }
-.scroll-hint-up { margin-top: 16px; }
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4px); }
-}
-
 /* ===== 录屏页 ===== */
-.recording-frame { width: min(84vw, 360px); }
+.recording-frame { width: min(38vw, 340px); }
 .recording-video {
   position: absolute;
   inset: 0;
@@ -1489,26 +1501,25 @@ body {
   transition: opacity 0.3s ease;
 }
 .recording-loading.hidden { opacity: 0; pointer-events: none; }
-.recording-caption {
-  text-align: center;
-  margin-top: 12px;
-}
-.recording-caption h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-}
-.recording-caption p {
-  font-size: 13px;
-  color: var(--text-secondary);
-}
 
-/* ===== 响应式适配 ===== */
+/* ===== 响应式适配：窄屏改为上下排列 ===== */
+@media (max-width: 900px) {
+  .main-stage {
+    flex-direction: column;
+    gap: 24px;
+    padding: 16px 20px;
+    overflow-y: auto;
+  }
+  .phone-frame { width: min(80vw, 320px); }
+  .recording-frame { width: min(80vw, 320px); }
+  .stage-title { font-size: 18px; }
+  .stage-desc { font-size: 12px; }
+}
 @media (max-width: 480px) {
-  .phone-frame { width: 90vw; }
-  .page-inner { padding: 12px; gap: 12px; }
+  .phone-frame { width: 88vw; }
+  .recording-frame { width: 88vw; }
   .focus-timer { font-size: 48px; }
+  .main-stage { padding: 12px; gap: 16px; }
 }
 
 /* ===== 补充样式（app.js 动态生成的元素） ===== */

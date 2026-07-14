@@ -8,432 +8,427 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-  <div class="page-container">
 
-    <!-- ========== 第一页：可交互 App 界面 ========== -->
-    <section class="page page-app">
-      <div class="page-inner">
-        <!-- 顶部标识 -->
-        <div class="page-tag">
-          <span class="material-icons">pets</span>
-          <span>FocusCat · 可交互界面</span>
+  <!-- ========== 单页：左右对称双手机 ========== -->
+  <main class="main-stage">
+
+    <!-- ===== 左侧：可交互 App 界面 ===== -->
+    <section class="stage-column stage-left">
+      <div class="stage-header">
+        <div class="stage-badge badge-interactive">
+          <span class="material-icons">touch_app</span>
+          <span>可交互演示</span>
         </div>
+        <h1 class="stage-title">FocusCat 专注猫</h1>
+        <p class="stage-desc">完整还原 Android App 的全部界面与交互<br>点击底部 Tab 切换页面，投喂猫咪，开启专注模式</p>
+      </div>
 
-        <!-- 手机外框 -->
-        <div class="phone-frame">
-          <div class="side-btn-left-1"></div>
-          <div class="side-btn-left-2"></div>
-          <div class="side-btn-left-3"></div>
-          <div class="side-btn-right"></div>
-          <div class="phone-screen">
+      <!-- 手机外框 -->
+      <div class="phone-frame">
+        <div class="side-btn-left-1"></div>
+        <div class="side-btn-left-2"></div>
+        <div class="side-btn-left-3"></div>
+        <div class="side-btn-right"></div>
+        <div class="phone-screen">
 
-            <!-- 状态栏 -->
-            <div class="status-bar">
-              <span class="status-time">9:41</span>
-              <span class="status-icons">
-                <span class="material-icons">signal_cellular_alt</span>
-                <span class="material-icons">wifi</span>
-                <span class="material-icons">battery_full</span>
-              </span>
+          <!-- 状态栏 -->
+          <div class="status-bar">
+            <span class="status-time">9:41</span>
+            <span class="status-icons">
+              <span class="material-icons">signal_cellular_alt</span>
+              <span class="material-icons">wifi</span>
+              <span class="material-icons">battery_full</span>
+            </span>
+          </div>
+
+          <!-- 内容区 -->
+          <div class="content-area" id="contentArea">
+
+            <!-- ===== 猫咪页 ===== -->
+            <div class="tab-content active" data-tab="cat">
+              <div class="scroll-content">
+                <h1 class="cat-name" id="catName">小橘</h1>
+                <p class="cat-breed" id="catBreed">橘猫</p>
+
+                <button class="primary-btn focus-start-btn" id="startFocusBtn">
+                  <span class="material-icons">play_arrow</span>
+                  <span>开始专注</span>
+                </button>
+
+                <div class="cat-animation-area" id="catAnimationArea">
+                  <div class="decoration-layer" id="decorationLayer">
+                    <div class="star star-1"></div>
+                    <div class="star star-2"></div>
+                    <div class="star star-3"></div>
+                    <div class="glow-outer"></div>
+                    <div class="glow-mid"></div>
+                  </div>
+                  <img class="cat-fallback" id="catFallback" src="assets/cats/orange.png" alt="cat">
+                  <!-- 双 video 交替播放，消除切换空窗 -->
+                  <video class="cat-video cat-video-a ready" id="catVideoA" muted playsinline preload="auto"></video>
+                  <video class="cat-video cat-video-b" id="catVideoB" muted playsinline preload="auto"></video>
+                  <div class="affinity-float" id="affinityFloat"></div>
+                </div>
+
+                <p class="encouragement" id="encouragement">猫咪刚认识你，多投喂几次，它会越来越亲近你</p>
+
+                <div class="app-card affinity-card">
+                  <div class="affinity-row">
+                    <span class="affinity-level">好感度: <span id="affinityLevel">0</span></span>
+                    <span class="affinity-title">称号: <span id="affinityTitle">初识之友</span></span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                  </div>
+                  <div class="affinity-divider"></div>
+                  <p class="affinity-info" id="affinityInfo">投喂 0 / 10 次</p>
+                </div>
+
+                <div class="food-section-header">
+                  <span class="material-icons accent">pets</span>
+                  <span>食物库存</span>
+                </div>
+
+                <div class="food-inventory-wrapper">
+                  <div class="food-inventory" id="foodInventory"></div>
+                  <div class="food-inventory-fade"></div>
+                </div>
+
+                <div class="achievement-header">成就</div>
+                <div id="achievementList"></div>
+
+                <div class="bottom-spacer"></div>
+              </div>
             </div>
 
-            <!-- 内容区 -->
-            <div class="content-area" id="contentArea">
-
-              <!-- ===== 猫咪页 ===== -->
-              <div class="tab-content active" data-tab="cat">
-                <div class="scroll-content">
-                  <h1 class="cat-name" id="catName">小橘</h1>
-                  <p class="cat-breed" id="catBreed">橘猫</p>
-
-                  <button class="primary-btn focus-start-btn" id="startFocusBtn">
-                    <span class="material-icons">play_arrow</span>
-                    <span>开始专注</span>
-                  </button>
-
-                  <div class="cat-animation-area" id="catAnimationArea">
-                    <div class="decoration-layer" id="decorationLayer">
-                      <div class="star star-1"></div>
-                      <div class="star star-2"></div>
-                      <div class="star star-3"></div>
-                      <div class="glow-outer"></div>
-                      <div class="glow-mid"></div>
-                    </div>
-                    <img class="cat-fallback" id="catFallback" src="assets/cats/orange.png" alt="cat">
-                    <video class="cat-video" id="catVideo" muted playsinline preload="auto"></video>
-                    <div class="affinity-float" id="affinityFloat"></div>
-                  </div>
-
-                  <p class="encouragement" id="encouragement">猫咪刚认识你，多投喂几次，它会越来越亲近你</p>
-
-                  <div class="app-card affinity-card">
-                    <div class="affinity-row">
-                      <span class="affinity-level">好感度: <span id="affinityLevel">0</span></span>
-                      <span class="affinity-title">称号: <span id="affinityTitle">初识之友</span></span>
-                    </div>
-                    <div class="progress-bar">
-                      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-                    </div>
-                    <div class="affinity-divider"></div>
-                    <p class="affinity-info" id="affinityInfo">投喂 0 / 10 次</p>
-                  </div>
-
-                  <div class="food-section-header">
-                    <span class="material-icons accent">pets</span>
-                    <span>食物库存</span>
-                  </div>
-
-                  <div class="food-inventory-wrapper">
-                    <div class="food-inventory" id="foodInventory"></div>
-                    <div class="food-inventory-fade"></div>
-                  </div>
-
-                  <div class="achievement-header">成就</div>
-                  <div id="achievementList"></div>
-
-                  <div class="bottom-spacer"></div>
-                </div>
+            <!-- ===== 约束应用页 ===== -->
+            <div class="tab-content" data-tab="apps">
+              <div class="apps-topbar">
+                <span class="material-icons accent">apps</span>
+                <span class="topbar-title">约束应用</span>
               </div>
-
-              <!-- ===== 约束应用页 ===== -->
-              <div class="tab-content" data-tab="apps">
-                <div class="apps-topbar">
-                  <span class="material-icons accent">apps</span>
-                  <span class="topbar-title">约束应用</span>
+              <div class="scroll-content">
+                <div class="guard-status-card">
+                  <div class="guard-info">
+                    <span class="material-icons" id="guardStatusIcon">warning</span>
+                    <div>
+                      <div class="guard-status-text" id="guardStatusText">守护已关闭</div>
+                      <div class="guard-status-desc" id="guardStatusDesc">开启后才会拦截约束应用</div>
+                    </div>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="guardSwitch">
+                    <span class="slider"></span>
+                  </label>
                 </div>
-                <div class="scroll-content">
-                  <div class="guard-status-card">
-                    <div class="guard-info">
-                      <span class="material-icons" id="guardStatusIcon">warning</span>
+
+                <div class="diagnostic-card" id="diagnosticCard">
+                  <div class="diagnostic-header">
+                    <span class="material-icons">info</span>
+                    <span>链路诊断</span>
+                  </div>
+                  <div id="diagnosticList"></div>
+                  <div class="diagnostic-tip">提示：在系统设置中授权后返回本页，状态会自动更新</div>
+                </div>
+
+                <div class="protected-apps-header">
+                  <span>已保护的 App</span>
+                  <span class="protected-count" id="protectedCount">0</span>
+                </div>
+                <div class="protected-apps-list" id="protectedAppsList">
+                  <div class="empty-apps">
+                    <span class="material-icons empty-icon">shield</span>
+                    <div class="empty-title">还没有添加约束应用</div>
+                    <div class="empty-desc">把容易让你分心的应用加进来<br>每次打开都会先弹反思问答</div>
+                    <button class="primary-btn" id="emptyAddAppBtn">
+                      <span class="material-icons">add</span>
+                      <span>添加约束应用</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="bottom-spacer"></div>
+              </div>
+              <button class="fab" id="fabAddApp" aria-label="添加约束应用">
+                <span class="material-icons">add</span>
+              </button>
+            </div>
+
+            <!-- ===== 统计页 ===== -->
+            <div class="tab-content" data-tab="stats">
+              <div class="stats-header">
+                <span class="material-icons accent">bar_chart</span>
+                <span class="stats-title">数据统计</span>
+              </div>
+              <div class="period-tabs" id="periodTabs">
+                <button class="period-tab active" data-period="today">今日</button>
+                <button class="period-tab" data-period="week">近 7 天</button>
+                <button class="period-tab" data-period="month">近 30 天</button>
+              </div>
+              <div class="scroll-content">
+                <div class="stat-cards-row">
+                  <div class="stat-card">
+                    <span class="material-icons stat-icon">timer</span>
+                    <div class="stat-title" id="periodFocusTitle">今日专注</div>
+                    <div class="stat-value" id="periodFocusValue">0m</div>
+                  </div>
+                  <div class="stat-card">
+                    <span class="material-icons stat-icon">block</span>
+                    <div class="stat-title" id="periodBlockTitle">今日拦截</div>
+                    <div class="stat-value" id="periodBlockValue">0</div>
+                  </div>
+                </div>
+                <div class="stat-cards-row">
+                  <div class="stat-card">
+                    <span class="material-icons stat-icon">timer</span>
+                    <div class="stat-title">总专注时长</div>
+                    <div class="stat-value" id="totalFocusValue">2h 15m</div>
+                  </div>
+                  <div class="stat-card">
+                    <span class="material-icons stat-icon">block</span>
+                    <div class="stat-title">总拦截次数</div>
+                    <div class="stat-value" id="totalBlockValue">8</div>
+                  </div>
+                </div>
+
+                <div class="trend-section" id="trendSection">
+                  <div class="trend-header">
+                    <span class="material-icons accent">bar_chart</span>
+                    <span id="trendTitle">专注时长</span>
+                  </div>
+                  <div class="app-card">
+                    <canvas id="trendChart" width="600" height="200"></canvas>
+                    <div class="trend-labels" id="trendLabels"></div>
+                  </div>
+                </div>
+
+                <div class="ranking-section">
+                  <div class="ranking-header">
+                    <span class="material-icons accent">block</span>
+                    <span>应用拦截排行</span>
+                  </div>
+                  <div class="app-card">
+                    <div class="ranking-list" id="rankingList"></div>
+                  </div>
+                </div>
+
+                <div class="bottom-spacer"></div>
+              </div>
+            </div>
+
+            <!-- ===== 设置页 ===== -->
+            <div class="tab-content" data-tab="settings">
+              <div class="scroll-content settings-scroll">
+                <h2 class="settings-title">设置</h2>
+
+                <div class="keepalive-card" id="keepaliveCard">
+                  <div class="keepalive-header">
+                    <div class="keepalive-info">
+                      <span class="material-icons amber">battery_full</span>
                       <div>
-                        <div class="guard-status-text" id="guardStatusText">守护已关闭</div>
-                        <div class="guard-status-desc" id="guardStatusDesc">开启后才会拦截约束应用</div>
+                        <div class="keepalive-title">后台保活引导</div>
+                        <div class="keepalive-desc">守护服务被杀？点这里查看设置方法</div>
                       </div>
                     </div>
+                    <span class="material-icons" id="keepaliveArrow">expand_more</span>
+                  </div>
+                  <div class="keepalive-body" id="keepaliveBody"></div>
+                </div>
+
+                <div class="section-header">通用设置</div>
+                <div class="ios-group">
+                  <div class="ios-nav-row" id="switchCatRow">
+                    <span class="material-icons icon-left">pets</span>
+                    <span class="ios-row-title">切换猫咪</span>
+                    <span class="material-icons icon-right">keyboard_arrow_right</span>
+                  </div>
+                  <div class="ios-divider"></div>
+                  <div class="ios-switch-row">
+                    <span class="material-icons icon-left">power_settings_new</span>
+                    <span class="ios-row-title">开机自启动</span>
                     <label class="switch">
-                      <input type="checkbox" id="guardSwitch">
+                      <input type="checkbox" id="bootStartupSwitch">
                       <span class="slider"></span>
                     </label>
                   </div>
-
-                  <div class="diagnostic-card" id="diagnosticCard">
-                    <div class="diagnostic-header">
-                      <span class="material-icons">info</span>
-                      <span>链路诊断</span>
-                    </div>
-                    <div id="diagnosticList"></div>
-                    <div class="diagnostic-tip">提示：在系统设置中授权后返回本页，状态会自动更新</div>
+                  <div class="ios-divider"></div>
+                  <div class="ios-switch-row">
+                    <span class="material-icons icon-left">notifications</span>
+                    <span class="ios-row-title">守护通知</span>
+                    <label class="switch">
+                      <input type="checkbox" id="notifSwitch" checked>
+                      <span class="slider"></span>
+                    </label>
                   </div>
-
-                  <div class="protected-apps-header">
-                    <span>已保护的 App</span>
-                    <span class="protected-count" id="protectedCount">0</span>
-                  </div>
-                  <div class="protected-apps-list" id="protectedAppsList">
-                    <div class="empty-apps">
-                      <span class="material-icons empty-icon">shield</span>
-                      <div class="empty-title">还没有添加约束应用</div>
-                      <div class="empty-desc">把容易让你分心的应用加进来<br>每次打开都会先弹反思问答</div>
-                      <button class="primary-btn" id="emptyAddAppBtn">
-                        <span class="material-icons">add</span>
-                        <span>添加约束应用</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="bottom-spacer"></div>
                 </div>
-                <button class="fab" id="fabAddApp" aria-label="添加约束应用">
-                  <span class="material-icons">add</span>
-                </button>
+
+                <div class="section-header">持续使用再次提醒</div>
+                <div class="ios-group">
+                  <div class="ios-switch-row" id="recurringToggleRow">
+                    <span class="material-icons icon-left">schedule</span>
+                    <span class="ios-row-title">持续使用再次提醒</span>
+                    <label class="switch">
+                      <input type="checkbox" id="recurringSwitch">
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                  <div class="recurring-input-area" id="recurringInputArea">
+                    <div class="recurring-label">再次提醒间隔（5-120 分钟）</div>
+                    <div class="recurring-input-row">
+                      <input type="number" class="recurring-input" id="recurringInput" min="5" max="120" placeholder="30">
+                      <span class="recurring-unit">分钟</span>
+                    </div>
+                    <div class="recurring-hint" id="recurringHint">范围 5-120 分钟，0 = 关闭</div>
+                  </div>
+                </div>
+
+                <div class="section-header">自定义与数据</div>
+                <div class="ios-group">
+                  <div class="ios-nav-row" id="reflectionQuestionsRow">
+                    <span class="material-icons icon-left">edit</span>
+                    <span class="ios-row-title">反思问题管理</span>
+                    <span class="material-icons icon-right">keyboard_arrow_right</span>
+                  </div>
+                  <div class="ios-divider"></div>
+                  <div class="ios-nav-row" id="exportDataRow">
+                    <span class="material-icons icon-left">upload</span>
+                    <span class="ios-row-title">导出数据</span>
+                    <span class="material-icons icon-right">keyboard_arrow_right</span>
+                  </div>
+                </div>
+
+                <div class="about-section">
+                  <div class="about-icon">
+                    <span class="material-icons">pets</span>
+                  </div>
+                  <div class="about-name">专注猫</div>
+                  <div class="about-version">版本 v1.0.0 (1)</div>
+                  <div class="about-footer">用温暖守护你的专注</div>
+                </div>
+
+                <div class="bottom-spacer"></div>
               </div>
-
-              <!-- ===== 统计页 ===== -->
-              <div class="tab-content" data-tab="stats">
-                <div class="stats-header">
-                  <span class="material-icons accent">bar_chart</span>
-                  <span class="stats-title">数据统计</span>
-                </div>
-                <div class="period-tabs" id="periodTabs">
-                  <button class="period-tab active" data-period="today">今日</button>
-                  <button class="period-tab" data-period="week">近 7 天</button>
-                  <button class="period-tab" data-period="month">近 30 天</button>
-                </div>
-                <div class="scroll-content">
-                  <div class="stat-cards-row">
-                    <div class="stat-card">
-                      <span class="material-icons stat-icon">timer</span>
-                      <div class="stat-title" id="periodFocusTitle">今日专注</div>
-                      <div class="stat-value" id="periodFocusValue">0m</div>
-                    </div>
-                    <div class="stat-card">
-                      <span class="material-icons stat-icon">block</span>
-                      <div class="stat-title" id="periodBlockTitle">今日拦截</div>
-                      <div class="stat-value" id="periodBlockValue">0</div>
-                    </div>
-                  </div>
-                  <div class="stat-cards-row">
-                    <div class="stat-card">
-                      <span class="material-icons stat-icon">timer</span>
-                      <div class="stat-title">总专注时长</div>
-                      <div class="stat-value" id="totalFocusValue">2h 15m</div>
-                    </div>
-                    <div class="stat-card">
-                      <span class="material-icons stat-icon">block</span>
-                      <div class="stat-title">总拦截次数</div>
-                      <div class="stat-value" id="totalBlockValue">8</div>
-                    </div>
-                  </div>
-
-                  <div class="trend-section" id="trendSection">
-                    <div class="trend-header">
-                      <span class="material-icons accent">bar_chart</span>
-                      <span id="trendTitle">专注时长</span>
-                    </div>
-                    <div class="app-card">
-                      <canvas id="trendChart" width="600" height="200"></canvas>
-                      <div class="trend-labels" id="trendLabels"></div>
-                    </div>
-                  </div>
-
-                  <div class="ranking-section">
-                    <div class="ranking-header">
-                      <span class="material-icons accent">block</span>
-                      <span>应用拦截排行</span>
-                    </div>
-                    <div class="app-card">
-                      <div class="ranking-list" id="rankingList"></div>
-                    </div>
-                  </div>
-
-                  <div class="bottom-spacer"></div>
-                </div>
-              </div>
-
-              <!-- ===== 设置页 ===== -->
-              <div class="tab-content" data-tab="settings">
-                <div class="scroll-content settings-scroll">
-                  <h2 class="settings-title">设置</h2>
-
-                  <div class="keepalive-card" id="keepaliveCard">
-                    <div class="keepalive-header">
-                      <div class="keepalive-info">
-                        <span class="material-icons amber">battery_full</span>
-                        <div>
-                          <div class="keepalive-title">后台保活引导</div>
-                          <div class="keepalive-desc">守护服务被杀？点这里查看设置方法</div>
-                        </div>
-                      </div>
-                      <span class="material-icons" id="keepaliveArrow">expand_more</span>
-                    </div>
-                    <div class="keepalive-body" id="keepaliveBody"></div>
-                  </div>
-
-                  <div class="section-header">通用设置</div>
-                  <div class="ios-group">
-                    <div class="ios-nav-row" id="switchCatRow">
-                      <span class="material-icons icon-left">pets</span>
-                      <span class="ios-row-title">切换猫咪</span>
-                      <span class="material-icons icon-right">keyboard_arrow_right</span>
-                    </div>
-                    <div class="ios-divider"></div>
-                    <div class="ios-switch-row">
-                      <span class="material-icons icon-left">power_settings_new</span>
-                      <span class="ios-row-title">开机自启动</span>
-                      <label class="switch">
-                        <input type="checkbox" id="bootStartupSwitch">
-                        <span class="slider"></span>
-                      </label>
-                    </div>
-                    <div class="ios-divider"></div>
-                    <div class="ios-switch-row">
-                      <span class="material-icons icon-left">notifications</span>
-                      <span class="ios-row-title">守护通知</span>
-                      <label class="switch">
-                        <input type="checkbox" id="notifSwitch" checked>
-                        <span class="slider"></span>
-                      </label>
-                    </div>
-                  </div>
-
-                  <div class="section-header">持续使用再次提醒</div>
-                  <div class="ios-group">
-                    <div class="ios-switch-row" id="recurringToggleRow">
-                      <span class="material-icons icon-left">schedule</span>
-                      <span class="ios-row-title">持续使用再次提醒</span>
-                      <label class="switch">
-                        <input type="checkbox" id="recurringSwitch">
-                        <span class="slider"></span>
-                      </label>
-                    </div>
-                    <div class="recurring-input-area" id="recurringInputArea">
-                      <div class="recurring-label">再次提醒间隔（5-120 分钟）</div>
-                      <div class="recurring-input-row">
-                        <input type="number" class="recurring-input" id="recurringInput" min="5" max="120" placeholder="30">
-                        <span class="recurring-unit">分钟</span>
-                      </div>
-                      <div class="recurring-hint" id="recurringHint">范围 5-120 分钟，0 = 关闭</div>
-                    </div>
-                  </div>
-
-                  <div class="section-header">自定义与数据</div>
-                  <div class="ios-group">
-                    <div class="ios-nav-row" id="reflectionQuestionsRow">
-                      <span class="material-icons icon-left">edit</span>
-                      <span class="ios-row-title">反思问题管理</span>
-                      <span class="material-icons icon-right">keyboard_arrow_right</span>
-                    </div>
-                    <div class="ios-divider"></div>
-                    <div class="ios-nav-row" id="exportDataRow">
-                      <span class="material-icons icon-left">upload</span>
-                      <span class="ios-row-title">导出数据</span>
-                      <span class="material-icons icon-right">keyboard_arrow_right</span>
-                    </div>
-                  </div>
-
-                  <div class="about-section">
-                    <div class="about-icon">
-                      <span class="material-icons">pets</span>
-                    </div>
-                    <div class="about-name">专注猫</div>
-                    <div class="about-version">版本 v1.0.0 (1)</div>
-                    <div class="about-footer">用温暖守护你的专注</div>
-                  </div>
-
-                  <div class="bottom-spacer"></div>
-                </div>
-              </div>
-
             </div>
 
-            <!-- 底部导航栏 -->
-            <nav class="bottom-nav" id="bottomNav">
-              <button class="nav-item active" data-route="cat">
-                <span class="material-icons">pets</span>
-                <span class="nav-label">猫咪</span>
-              </button>
-              <button class="nav-item" data-route="apps">
-                <span class="material-icons">shield</span>
-                <span class="nav-label">约束应用</span>
-              </button>
-              <button class="nav-item" data-route="stats">
-                <span class="material-icons">bar_chart</span>
-                <span class="nav-label">统计</span>
-              </button>
-              <button class="nav-item" data-route="settings">
-                <span class="material-icons">settings</span>
-                <span class="nav-label">设置</span>
-              </button>
-            </nav>
+          </div>
 
-            <!-- ===== 全屏覆盖：专注模式 ===== -->
-            <div class="fullscreen-overlay" id="focusScreen">
-              <video class="focus-video" id="focusVideo" muted playsinline preload="auto"></video>
-              <button class="focus-back-btn" id="focusBackBtn">
+          <!-- 底部导航栏 -->
+          <nav class="bottom-nav" id="bottomNav">
+            <button class="nav-item active" data-route="cat">
+              <span class="material-icons">pets</span>
+              <span class="nav-label">猫咪</span>
+            </button>
+            <button class="nav-item" data-route="apps">
+              <span class="material-icons">shield</span>
+              <span class="nav-label">约束应用</span>
+            </button>
+            <button class="nav-item" data-route="stats">
+              <span class="material-icons">bar_chart</span>
+              <span class="nav-label">统计</span>
+            </button>
+            <button class="nav-item" data-route="settings">
+              <span class="material-icons">settings</span>
+              <span class="nav-label">设置</span>
+            </button>
+          </nav>
+
+          <!-- ===== 全屏覆盖：专注模式 ===== -->
+          <div class="fullscreen-overlay" id="focusScreen">
+            <video class="focus-video" id="focusVideo" muted playsinline preload="auto"></video>
+            <button class="focus-back-btn" id="focusBackBtn">
+              <span class="material-icons">arrow_back</span>
+            </button>
+            <div class="focus-timer" id="focusTimer">00:00</div>
+            <div class="reward-banner" id="rewardBanner">
+              <span class="material-icons">emoji_events</span>
+              <span id="rewardText">为猫咪赢得 猫粮 x1</span>
+            </div>
+          </div>
+
+          <!-- ===== 全屏覆盖：猫咪切换 ===== -->
+          <div class="fullscreen-overlay cat-switch-screen" id="catSwitchScreen">
+            <div class="cat-switch-back-bar">
+              <button class="back-btn" id="catSwitchBackBtn">
                 <span class="material-icons">arrow_back</span>
               </button>
-              <div class="focus-timer" id="focusTimer">00:00</div>
-              <div class="reward-banner" id="rewardBanner">
-                <span class="material-icons">emoji_events</span>
-                <span id="rewardText">为猫咪赢得 猫粮 x1</span>
-              </div>
             </div>
-
-            <!-- ===== 全屏覆盖：猫咪切换 ===== -->
-            <div class="fullscreen-overlay cat-switch-screen" id="catSwitchScreen">
-              <div class="cat-switch-back-bar">
-                <button class="back-btn" id="catSwitchBackBtn">
-                  <span class="material-icons">arrow_back</span>
-                </button>
-              </div>
-              <h2 class="cat-switch-title">切换专注伙伴</h2>
-              <p class="cat-switch-subtitle">每只猫咪都有独立的养成进度，切换即恢复</p>
-              <div class="cat-switch-section-title">我的猫咪</div>
-              <div class="cat-switch-grid" id="catSwitchGrid"></div>
-              <button class="primary-btn confirm-switch-btn" id="confirmSwitchBtn">确认切换</button>
-            </div>
-
-            <!-- ===== 全屏覆盖：反思问题管理 ===== -->
-            <div class="fullscreen-overlay reflection-screen" id="reflectionScreen">
-              <div class="cat-switch-back-bar">
-                <button class="back-btn" id="reflectionBackBtn">
-                  <span class="material-icons">arrow_back</span>
-                </button>
-              </div>
-              <h2 class="cat-switch-title">反思问题管理</h2>
-              <p class="cat-switch-subtitle">每次进入约束应用时弹出，所有问题必答</p>
-              <div id="reflectionList" class="reflection-list"></div>
-            </div>
-
-            <!-- ===== Modal: 添加约束应用 ===== -->
-            <div class="modal-overlay" id="addAppModal">
-              <div class="modal-sheet">
-                <div class="sheet-handle"></div>
-                <h3 class="sheet-title">选择应用</h3>
-                <div class="search-box">
-                  <span class="material-icons">search</span>
-                  <input type="text" id="appSearchInput" placeholder="搜索应用">
-                </div>
-                <div class="app-list" id="appList"></div>
-              </div>
-            </div>
-
-            <!-- ===== Modal: 退出专注确认 ===== -->
-            <div class="modal-overlay" id="exitFocusModal">
-              <div class="dialog-box">
-                <div class="dialog-title">确定要退出专注吗？</div>
-                <div class="dialog-text" id="exitFocusText">还有 25 分钟就可以为猫咪获得下一份猫粮奖励，确定要退出吗？</div>
-                <div class="dialog-actions">
-                  <button class="dialog-btn dialog-btn-text" id="exitFocusConfirm">退出</button>
-                  <button class="dialog-btn dialog-btn-primary" id="exitFocusCancel">继续专注</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- ===== Toast ===== -->
-            <div class="toast" id="toast"></div>
-
+            <h2 class="cat-switch-title">切换专注伙伴</h2>
+            <p class="cat-switch-subtitle">每只猫咪都有独立的养成进度，切换即恢复</p>
+            <div class="cat-switch-section-title">我的猫咪</div>
+            <div class="cat-switch-grid" id="catSwitchGrid"></div>
+            <button class="primary-btn confirm-switch-btn" id="confirmSwitchBtn">确认切换</button>
           </div>
-        </div>
 
-        <div class="scroll-hint">
-          <span class="material-icons">keyboard_arrow_down</span>
-          <span>下滑查看录屏演示</span>
+          <!-- ===== 全屏覆盖：反思问题管理 ===== -->
+          <div class="fullscreen-overlay reflection-screen" id="reflectionScreen">
+            <div class="cat-switch-back-bar">
+              <button class="back-btn" id="reflectionBackBtn">
+                <span class="material-icons">arrow_back</span>
+              </button>
+            </div>
+            <h2 class="cat-switch-title">反思问题管理</h2>
+            <p class="cat-switch-subtitle">每次进入约束应用时弹出，所有问题必答</p>
+            <div id="reflectionList" class="reflection-list"></div>
+          </div>
+
+          <!-- ===== Modal: 添加约束应用 ===== -->
+          <div class="modal-overlay" id="addAppModal">
+            <div class="modal-sheet">
+              <div class="sheet-handle"></div>
+              <h3 class="sheet-title">选择应用</h3>
+              <div class="search-box">
+                <span class="material-icons">search</span>
+                <input type="text" id="appSearchInput" placeholder="搜索应用">
+              </div>
+              <div class="app-list" id="appList"></div>
+            </div>
+          </div>
+
+          <!-- ===== Modal: 退出专注确认 ===== -->
+          <div class="modal-overlay" id="exitFocusModal">
+            <div class="dialog-box">
+              <div class="dialog-title">确定要退出专注吗？</div>
+              <div class="dialog-text" id="exitFocusText">还有 25 分钟就可以为猫咪获得下一份猫粮奖励，确定要退出吗？</div>
+              <div class="dialog-actions">
+                <button class="dialog-btn dialog-btn-text" id="exitFocusConfirm">退出</button>
+                <button class="dialog-btn dialog-btn-primary" id="exitFocusCancel">继续专注</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== Toast ===== -->
+          <div class="toast" id="toast"></div>
+
         </div>
       </div>
     </section>
 
-    <!-- ========== 第二页：录屏演示 ========== -->
-    <section class="page page-recording">
-      <div class="page-inner">
-        <div class="page-tag">
+    <!-- ===== 右侧：录屏演示 ===== -->
+    <section class="stage-column stage-right">
+      <div class="stage-header">
+        <div class="stage-badge badge-recording">
           <span class="material-icons">videocam</span>
-          <span>FocusCat · 手机实机录屏</span>
+          <span>实机录屏</span>
         </div>
-        <div class="phone-frame recording-frame">
-          <div class="side-btn-left-1"></div>
-          <div class="side-btn-left-2"></div>
-          <div class="side-btn-left-3"></div>
-          <div class="side-btn-right"></div>
-          <div class="phone-screen">
-            <video class="recording-video" id="recordingVideo" muted playsinline autoplay loop preload="auto">
-              <source src="assets/专注猫录屏.mp4" type="video/mp4">
-            </video>
-            <div class="recording-loading" id="recordingLoading">正在加载视频…</div>
-          </div>
-        </div>
-        <div class="recording-caption">
-          <h3>FocusCat 实机运行录屏</h3>
-          <p>含 idle 待机 / 投喂进食 / 专注模式 / 应用拦截 完整流程演示</p>
-        </div>
-        <div class="scroll-hint scroll-hint-up">
-          <span class="material-icons">keyboard_arrow_up</span>
-          <span>上滑返回可交互界面</span>
+        <h1 class="stage-title">手机实机运行</h1>
+        <p class="stage-desc">完整录制 FocusCat 在 Android 手机上的运行流程<br>含 idle 待机 / 投喂进食 / 专注模式 / 应用拦截</p>
+      </div>
+
+      <div class="phone-frame recording-frame">
+        <div class="side-btn-left-1"></div>
+        <div class="side-btn-left-2"></div>
+        <div class="side-btn-left-3"></div>
+        <div class="side-btn-right"></div>
+        <div class="phone-screen">
+          <video class="recording-video" id="recordingVideo" muted playsinline autoplay loop preload="auto">
+            <source src="assets/专注猫录屏.mp4" type="video/mp4">
+          </video>
+          <div class="recording-loading" id="recordingLoading">正在加载视频…</div>
         </div>
       </div>
     </section>
 
-  </div>
+  </main>
 
   <script src="app.js"></script>
 </body>

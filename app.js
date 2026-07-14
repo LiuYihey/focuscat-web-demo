@@ -147,47 +147,79 @@ function getNextMilestone(feedCount){
   return null;
 }
 
-// ========== 视频管理（核心：首帧占位 + idle 轮播 + eating 单次）==========
-const catVideo = $('#catVideo');
+// ========== 视频管理（双 video 交替播放，消除切换空窗）==========
+// 对应 Android ExoPlayer setKeepContentOnPlayerReset(true)：
+// A 播放时 B 预加载下一个视频，ended 后无缝切换到 B
+const catVideoA = $('#catVideoA');
+const catVideoB = $('#catVideoB');
 const catFallback = $('#catFallback');
+let activeVideo = catVideoA;   // 当前播放的 video 元素
+let inactiveVideo = catVideoB; // 预加载用的 video 元素
+let preloadedSrc = null;       // inactive 已预加载的 src
 
-function setVideoSource(src, loop){
-  if (catVideo.src.endsWith(src)) {
-    catVideo.loop = loop;
-    return;
-  }
-  catVideo.loop = loop;
-  catVideo.src = src;
-  catVideo.load();
+function getVideoSrc(video){
+  // 取 src 属性去掉域名前缀
+  const s = video.src || '';
+  return s.split('/').slice(-2).join('/');
 }
 
 function showFallback(){
   state.videoReady = false;
-  catFallback.style.opacity = '1';   // PNG 占位显示
-  catVideo.classList.remove('ready'); // 视频隐藏
+  catFallback.style.opacity = '1';
+  activeVideo.classList.remove('ready');
+  inactiveVideo.classList.remove('ready');
 }
 
 function hideFallback(){
   state.videoReady = true;
-  catFallback.style.opacity = '0';   // PNG 占位淡出
-  catVideo.classList.add('ready');    // 视频显示
+  catFallback.style.opacity = '0';
+  activeVideo.classList.add('ready');
 }
 
+// 在 inactive video 上预加载视频（不播放）
+function preloadOnInactive(src){
+  if (preloadedSrc === src) return;
+  inactiveVideo.src = src;
+  inactiveVideo.load();
+  preloadedSrc = src;
+}
+
+// 播放 idle 视频（核心：双 video 交替）
 function playIdleVideo(){
   state.currentVideoMode = 'idle';
   const breed = getCurrentBreed();
   const src = breed.idleVideos[state.idleVideoIndex % breed.idleVideos.length];
-  // idle 视频使用 loop=false 以触发 ended 事件，自动轮播到下一个 idle 子动画
-  // （主 idle → 伸懒腰 → 蝴蝶 → 踩奶 → 主 idle...）
-  setVideoSource(src, false);
-  catVideo.play().catch(()=>{});
+
+  // 如果 inactive 已预加载了这个视频且 ready，直接切换
+  if (preloadedSrc === src && inactiveVideo.readyState >= 2){
+    // 无缝切换：隐藏旧的，显示新的
+    activeVideo.classList.remove('ready');
+    activeVideo.pause();
+    [activeVideo, inactiveVideo] = [inactiveVideo, activeVideo];
+    activeVideo.classList.add('ready');
+    hideFallback();
+    activeVideo.currentTime = 0;
+    activeVideo.play().catch(()=>{});
+  } else {
+    // 首次加载或预加载未完成，直接在 active 上加载
+    activeVideo.src = src;
+    activeVideo.load();
+    activeVideo.play().catch(()=>{});
+  }
+
+  // 预加载下一个 idle 视频（A 播放时 B 预加载）
+  const nextIndex = (state.idleVideoIndex + 1) % breed.idleVideos.length;
+  preloadOnInactive(breed.idleVideos[nextIndex]);
 }
 
 function playEatingVideo(){
   state.currentVideoMode = 'eating';
   const breed = getCurrentBreed();
-  setVideoSource(breed.eatingVideo, false);
-  catVideo.play().catch(()=>{});
+  // eating 视频直接在 active 上加载（不需要预加载，因为是单次播放）
+  activeVideo.src = breed.eatingVideo;
+  activeVideo.load();
+  activeVideo.play().catch(()=>{});
+  preloadedSrc = null;
 }
 
 function playFocusVideo(){
@@ -208,25 +240,27 @@ function stopFocusVideo(){
   focusVideo.load();
 }
 
-// 视频事件绑定（合并 ended 监听到单一处理器，对应 Android onVideoCompletion 回调）
-catVideo.addEventListener('loadeddata', ()=>{
-  // 视频首帧已加载完成，隐藏 fallback（无缝切换：PNG 占位 → 视频）
-  hideFallback();
-});
-catVideo.addEventListener('ended', ()=>{
-  if (state.currentVideoMode === 'eating'){
-    // eating 视频播放完成，切回 idle（Android: onVideoCompletion → idle）
-    state.idleVideoIndex = 0;
-    playIdleVideo();
-  } else if (state.currentVideoMode === 'idle'){
-    // idle 子视频轮播：每次结束后切到下一个 idle 动画（伸懒腰/蝴蝶/踩奶）
-    state.idleVideoIndex = (state.idleVideoIndex + 1) % getCurrentBreed().idleVideos.length;
-    playIdleVideo();
-  }
-});
-catVideo.addEventListener('error', ()=>{
-  // 兜底：保持 fallback 显示
-  showFallback();
+// 视频事件绑定（对应 Android onVideoCompletion 回调）
+// 两个 video 元素都绑定事件，因为 active/inactive 会交替切换
+[catVideoA, catVideoB].forEach(video => {
+  video.addEventListener('loadeddata', ()=>{
+    // 仅当前 active video 触发时隐藏 fallback
+    if (video === activeVideo) hideFallback();
+  });
+  video.addEventListener('ended', ()=>{
+    // 仅当前 active video 触发时处理轮播
+    if (video !== activeVideo) return;
+    if (state.currentVideoMode === 'eating'){
+      state.idleVideoIndex = 0;
+      playIdleVideo();
+    } else if (state.currentVideoMode === 'idle'){
+      state.idleVideoIndex = (state.idleVideoIndex + 1) % getCurrentBreed().idleVideos.length;
+      playIdleVideo();
+    }
+  });
+  video.addEventListener('error', ()=>{
+    if (video === activeVideo) showFallback();
+  });
 });
 
 // 切换猫咪品种时，先显示 fallback，再加载新视频
@@ -236,6 +270,12 @@ function switchBreed(newBreedId){
   state.idleVideoIndex = 0;
   state.currentVideoMode = 'idle';
   catFallback.src = getCurrentBreed().fallbackImage;
+  // 重置双 video 状态
+  activeVideo.classList.remove('ready');
+  inactiveVideo.classList.remove('ready');
+  activeVideo.removeAttribute('src');
+  inactiveVideo.removeAttribute('src');
+  preloadedSrc = null;
   showFallback();
   playIdleVideo();
   renderCatInfo();
@@ -332,7 +372,7 @@ function feedCat(foodId){
 
   // 视频结束后结算好感度（监听一次 ended）
   const onEatingEnd = ()=>{
-    catVideo.removeEventListener('ended', onEatingEnd);
+    activeVideo.removeEventListener('ended', onEatingEnd);
     const food = FOODS.find(f => f.foodId === foodId);
     const cat = getCurrentCat();
     cat.affinity += food.affinityBonus;
@@ -344,12 +384,12 @@ function feedCat(foodId){
     // 检查新成就
     checkAchievementUnlock(cat);
   };
-  catVideo.addEventListener('ended', onEatingEnd);
+  activeVideo.addEventListener('ended', onEatingEnd);
 
   // 安全超时（20 秒，对应 Android 端的 20s 安全超时）
   setTimeout(()=>{
     if (feedingLock){
-      catVideo.removeEventListener('ended', onEatingEnd);
+      activeVideo.removeEventListener('ended', onEatingEnd);
       if (state.currentVideoMode === 'eating'){
         state.idleVideoIndex = 0;
         playIdleVideo();
@@ -937,7 +977,7 @@ function init(){
   // 启动 idle 视频
   playIdleVideo();
   // 确保 fallback 在视频可用前显示
-  if (catVideo.readyState < 2){
+  if (activeVideo.readyState < 2){
     showFallback();
   }
 }
