@@ -22,7 +22,7 @@ TRAE调用视频生成API生成素材.png
 确认开发路径.png
 调用loop-engineering skill优化app.png
 
-# 大视频文件通过 GitHub Release 外链加载（避免 Cloudflare 25MB 限制）
+# 原始大视频文件（已压缩为 focuscat-recording.mp4，15.7MB）
 assets/专注猫录屏.mp4
 assets/专注猫录屏_original.mp4
 assets/focuscat-demo-recording.mp4
