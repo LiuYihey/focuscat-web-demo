@@ -26,3 +26,10 @@ TRAE调用视频生成API生成素材.png
 assets/专注猫录屏.mp4
 assets/专注猫录屏_original.mp4
 assets/focuscat-demo-recording.mp4
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
