@@ -948,14 +948,46 @@ function exitFocus(){
   showToast(`本次专注 ${Math.floor(state.focusSeconds/60)} 分钟`);
 }
 
-// ========== 录屏页加载提示 ==========
+// ========== 录屏页懒加载（移动端优化）==========
 const recordingVideo = $('#recordingVideo');
+let recordingLoaded = false;
+
+function loadRecordingVideo(){
+  if (recordingLoaded) return;
+  recordingLoaded = true;
+  const src = recordingVideo.getAttribute('data-src');
+  if (!src) return;
+  const source = document.createElement('source');
+  source.src = src;
+  source.type = 'video/mp4';
+  recordingVideo.appendChild(source);
+  recordingVideo.load();
+  recordingVideo.play().catch(() => {});
+}
+
 recordingVideo.addEventListener('loadeddata', ()=>{
   $('#recordingLoading').classList.add('hidden');
+  recordingVideo.play().catch(() => {});
 });
 recordingVideo.addEventListener('error', ()=>{
   $('#recordingLoading').textContent = '视频加载失败';
 });
+
+// IntersectionObserver: 滚动到可视区域才加载录屏视频
+if ('IntersectionObserver' in window) {
+  const recObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        loadRecordingVideo();
+        recObserver.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '100px' });
+  recObserver.observe(recordingVideo);
+} else {
+  // 不支持 IntersectionObserver 的浏览器直接加载
+  loadRecordingVideo();
+}
 
 // ========== 启动初始化 ==========
 function init(){

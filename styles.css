@@ -54,6 +54,9 @@ body {
   gap: 48px;
   padding: 20px 40px;
   overflow: hidden;
+  /* 整体缩放至 90%，避免默认 100% 缩放时内容过大 */
+  transform: scale(0.9);
+  transform-origin: center center;
 }
 
 .stage-column {
