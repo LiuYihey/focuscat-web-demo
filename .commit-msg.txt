@@ -1,8 +1,8 @@
-fix: mobile responsive - scrollable layout with both interactive demo and recording
+feat: external video link + mobile responsive + Cloudflare-ready
 
-- Revert mobile-first H5 refactor that hid recording section
-- Restore scrollable column layout on narrow screens (<=900px)
-- Interactive demo on top, screen recording below
-- Keep phone frames and all basic elements unchanged
-- Restore iOS Safari autoplay unlock code
-- Add ultra-narrow screen (<=360px) adaptation
+- Replace 68.5MB recording video with GitHub Release external link
+- Remove large video from git tracking (Cloudflare 25MB limit)
+- Recording video now loads from GitHub Release CDN
+- Mobile responsive: scrollable column layout with both phones visible
+- Interactive demo on top, screen recording below on narrow screens
+- Update .gitignore to exclude large video files
