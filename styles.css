@@ -51,12 +51,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 48px;
-  padding: 20px 40px;
+  gap: 32px;
+  padding: 16px 32px;
   overflow: hidden;
-  /* 整体缩放至 90%，避免默认 100% 缩放时内容过大 */
-  transform: scale(0.9);
-  transform-origin: center center;
 }
 
 .stage-column {
@@ -115,18 +112,18 @@ body {
 /* ===== 手机外框（复用录屏 HTML 样式） ===== */
 .phone-frame {
   position: relative;
-  width: min(38vw, 340px);
+  width: min(32vw, 290px);
   aspect-ratio: 9 / 19.5;
   background: #0D0D0E;
-  border-radius: 54px;
-  padding: 12px;
+  border-radius: 48px;
+  padding: 10px;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.22),
     0 0 0 3px #1A1A1C,
     0 0 0 5px #0A0A0B,
-    0 60px 140px rgba(60, 45, 30, 0.22),
-    0 30px 70px rgba(60, 45, 30, 0.16),
-    0 12px 24px rgba(60, 45, 30, 0.1);
+    0 50px 120px rgba(60, 45, 30, 0.22),
+    0 25px 60px rgba(60, 45, 30, 0.16),
+    0 10px 20px rgba(60, 45, 30, 0.1);
 }
 .phone-frame::before {
   content: "";
