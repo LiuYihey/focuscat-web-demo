@@ -23,14 +23,11 @@
 
 html, body {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
+  overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
-}
-/* PC 端保持单屏不滚动 */
-@media (min-width: 769px) {
-  html, body { height: 100%; overflow: hidden; }
 }
 
 /* ===== 共享渐变背景（来自 FocusCat-录屏演示.html） ===== */
@@ -1505,91 +1502,49 @@ body {
 }
 .recording-loading.hidden { opacity: 0; pointer-events: none; }
 
-/* ===== 移动端优先：手机端直接呈现 App 全屏体验 ===== */
-@media (max-width: 768px) {
-  body {
-    background: var(--background);
-    display: block;
-    align-items: initial;
-    justify-content: initial;
-  }
-  .main-stage {
-    width: 100%;
-    min-height: 100vh;
+/* ===== 响应式适配：窄屏改为上下排列，支持滚动 ===== */
+@media (max-width: 900px) {
+  /* 解锁 body 滚动 —— 桌面端单页不滚动，移动端必须可滚动 */
+  html, body {
     height: auto;
-    display: block;
-    padding: 0;
-    gap: 0;
-    overflow: visible;
-  }
-  /* 移动端只展示交互手机，录屏列隐藏（手机端优先保证交互体验） */
-  .stage-right { display: none; }
-  .stage-left {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-  /* 顶部说明压缩为一行精简 badge */
-  .stage-header {
-    padding: 10px 16px 6px;
-    gap: 4px;
-    background: var(--surface-variant);
-    border-bottom: 1px solid rgba(255, 159, 67, 0.12);
-  }
-  .stage-badge {
-    padding: 4px 12px;
-    font-size: 11px;
-  }
-  .stage-badge .material-icons { font-size: 14px; }
-  .stage-title { font-size: 15px; }
-  .stage-desc { display: none; }
-
-  /* 手机外框：移动端去掉黑色机身，直接让屏幕占满剩余视口 */
-  .phone-frame {
-    width: 100%;
-    flex: 1 1 auto;
-    min-height: 0;
-    aspect-ratio: auto;
-    background: var(--background);
-    border-radius: 0;
-    padding: 0;
-    box-shadow: none;
-  }
-  .phone-frame::before,
-  .side-btn-left-1, .side-btn-left-2, .side-btn-left-3, .side-btn-right { display: none; }
-  .phone-screen { border-radius: 0; }
-
-  /* 状态栏在移动端隐藏（浏览器已有自己的状态栏） */
-  .status-bar { display: none; }
-  .content-area { flex: 1; }
-
-  /* 专注计时器字号适配 */
-  .focus-timer { font-size: 56px; }
-}
-
-/* ===== 平板：上下排列双手机 ===== */
-@media (min-width: 769px) and (max-width: 1100px) {
-  .main-stage {
-    flex-direction: column;
-    gap: 24px;
-    padding: 16px 20px;
     overflow-y: auto;
+    overflow-x: hidden;
+    display: block;
+    align-items: stretch;
+    justify-content: stretch;
+    background-attachment: scroll;
+  }
+  .main-stage {
+    flex-direction: column;
+    gap: 32px;
+    padding: 24px 16px 48px;
     height: auto;
     min-height: 100vh;
+    overflow: visible;
+    align-items: center;
   }
-  .phone-frame,
-  .recording-frame { width: min(60vw, 320px); }
+  /* 交互演示在上，录屏在下 —— 通过 order 确保顺序 */
+  .stage-left { order: 1; }
+  .stage-right { order: 2; }
+  .phone-frame { width: min(82vw, 340px); }
+  .recording-frame { width: min(82vw, 340px); }
   .stage-title { font-size: 18px; }
-  .stage-desc { font-size: 12px; }
+  .stage-desc { font-size: 12px; max-width: 280px; }
 }
-
-/* ===== 超小屏微调 ===== */
+@media (max-width: 480px) {
+  .main-stage { padding: 16px 12px 40px; gap: 24px; }
+  .phone-frame { width: 90vw; }
+  .recording-frame { width: 90vw; }
+  .focus-timer { font-size: 48px; }
+  .stage-badge { font-size: 12px; padding: 6px 16px; }
+  .stage-title { font-size: 17px; }
+  .stage-desc { font-size: 11px; max-width: 240px; }
+  .stage-header { gap: 8px; }
+}
+/* 超窄屏（折叠屏竖屏 / 小屏手机） */
 @media (max-width: 360px) {
-  .stage-title { font-size: 14px; }
-  .stage-badge { font-size: 10px; padding: 3px 10px; }
-  .focus-timer { font-size: 44px; }
+  .phone-frame { width: 94vw; }
+  .recording-frame { width: 94vw; }
 }
 
 /* ===== 补充样式（app.js 动态生成的元素） ===== */

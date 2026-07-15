@@ -12,3 +12,12 @@ Thumbs.db
 # Local server cache
 __pycache__/
 *.pyc
+
+# 本地发帖素材（不推送到 GitHub）
+MVP行动方案.png
+TRAE调用视频生成API生成素材.png
+修复app测试错误.png
+分阶段执行.png
+初赛发帖内容.md
+确认开发路径.png
+调用loop-engineering skill优化app.png
