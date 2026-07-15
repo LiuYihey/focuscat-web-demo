@@ -985,18 +985,48 @@ function init(){
 document.addEventListener('DOMContentLoaded', init);
 
 // ========== 移动端视频自动播放解锁 ==========
-// iOS Safari 即使 muted 也可能需要首次用户手势才能播放
-// 监听首次 touchend/click，强制触发视频播放
+// iOS Safari / Android Chrome 移动版即使 muted+playsinline 也需要
+// 首次用户手势才能首次播放。此模块在用户首次交互后持续尝试播放，
+// 直到 active 视频成功开始播放为止。
 (function unlockAutoplay(){
+  let unlocked = false;
   function unlockVideos(){
-    [catVideoA, catVideoB, $('#focusVideo'), $('#recordingVideo')].forEach(v => {
+    if (unlocked) return;
+    const videos = [catVideoA, catVideoB, $('#focusVideo'), $('#recordingVideo')];
+    let anyPlaying = false;
+    videos.forEach(v => {
       if (!v) return;
       v.muted = true;
-      if (v.readyState >= 2 && v.paused) v.play().catch(()=>{});
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
+      // 只要 readyState >= 1 (HAVE_METADATA) 就尝试播放
+      if (v.readyState >= 1 && v.paused) {
+        const p = v.play();
+        if (p && typeof p.then === 'function') {
+          p.then(() => { if (v === activeVideo) anyPlaying = true; }).catch(() => {});
+        }
+      }
     });
-    document.removeEventListener('touchend', unlockVideos);
-    document.removeEventListener('click', unlockVideos);
+    // 标记解锁完成：active video 已经在播放
+    if (!activeVideo.paused) {
+      unlocked = true;
+      document.removeEventListener('touchend', unlockVideos);
+      document.removeEventListener('click', unlockVideos);
+    }
   }
-  document.addEventListener('touchend', unlockVideos, { once: false });
-  document.addEventListener('click', unlockVideos, { once: false });
+  document.addEventListener('touchend', unlockVideos, { passive: true });
+  document.addEventListener('click', unlockVideos, { passive: true });
+  // 兜底：DOMContentLoaded 后延迟 500ms 尝试一次（部分浏览器允许无手势自动播放 muted）
+  setTimeout(unlockVideos, 500);
+  setTimeout(unlockVideos, 1500);
 })();
+
+// 视频 loadeddata / canplay 事件兜底：视频就绪后立即尝试播放
+[catVideoA, catVideoB].forEach(video => {
+  video.addEventListener('canplay', () => {
+    if (video === activeVideo && video.paused) {
+      video.muted = true;
+      video.play().catch(() => {});
+    }
+  });
+});
