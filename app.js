@@ -983,3 +983,20 @@ function init(){
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// ========== 移动端视频自动播放解锁 ==========
+// iOS Safari 即使 muted 也可能需要首次用户手势才能播放
+// 监听首次 touchend/click，强制触发视频播放
+(function unlockAutoplay(){
+  function unlockVideos(){
+    [catVideoA, catVideoB, $('#focusVideo'), $('#recordingVideo')].forEach(v => {
+      if (!v) return;
+      v.muted = true;
+      if (v.readyState >= 2 && v.paused) v.play().catch(()=>{});
+    });
+    document.removeEventListener('touchend', unlockVideos);
+    document.removeEventListener('click', unlockVideos);
+  }
+  document.addEventListener('touchend', unlockVideos, { once: false });
+  document.addEventListener('click', unlockVideos, { once: false });
+})();

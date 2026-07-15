@@ -23,11 +23,14 @@
 
 html, body {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+}
+/* PC 端保持单屏不滚动 */
+@media (min-width: 769px) {
+  html, body { height: 100%; overflow: hidden; }
 }
 
 /* ===== 共享渐变背景（来自 FocusCat-录屏演示.html） ===== */
@@ -1502,24 +1505,91 @@ body {
 }
 .recording-loading.hidden { opacity: 0; pointer-events: none; }
 
-/* ===== 响应式适配：窄屏改为上下排列 ===== */
-@media (max-width: 900px) {
+/* ===== 移动端优先：手机端直接呈现 App 全屏体验 ===== */
+@media (max-width: 768px) {
+  body {
+    background: var(--background);
+    display: block;
+    align-items: initial;
+    justify-content: initial;
+  }
+  .main-stage {
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    display: block;
+    padding: 0;
+    gap: 0;
+    overflow: visible;
+  }
+  /* 移动端只展示交互手机，录屏列隐藏（手机端优先保证交互体验） */
+  .stage-right { display: none; }
+  .stage-left {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  /* 顶部说明压缩为一行精简 badge */
+  .stage-header {
+    padding: 10px 16px 6px;
+    gap: 4px;
+    background: var(--surface-variant);
+    border-bottom: 1px solid rgba(255, 159, 67, 0.12);
+  }
+  .stage-badge {
+    padding: 4px 12px;
+    font-size: 11px;
+  }
+  .stage-badge .material-icons { font-size: 14px; }
+  .stage-title { font-size: 15px; }
+  .stage-desc { display: none; }
+
+  /* 手机外框：移动端去掉黑色机身，直接让屏幕占满剩余视口 */
+  .phone-frame {
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    aspect-ratio: auto;
+    background: var(--background);
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+  .phone-frame::before,
+  .side-btn-left-1, .side-btn-left-2, .side-btn-left-3, .side-btn-right { display: none; }
+  .phone-screen { border-radius: 0; }
+
+  /* 状态栏在移动端隐藏（浏览器已有自己的状态栏） */
+  .status-bar { display: none; }
+  .content-area { flex: 1; }
+
+  /* 专注计时器字号适配 */
+  .focus-timer { font-size: 56px; }
+}
+
+/* ===== 平板：上下排列双手机 ===== */
+@media (min-width: 769px) and (max-width: 1100px) {
   .main-stage {
     flex-direction: column;
     gap: 24px;
     padding: 16px 20px;
     overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
   }
-  .phone-frame { width: min(80vw, 320px); }
-  .recording-frame { width: min(80vw, 320px); }
+  .phone-frame,
+  .recording-frame { width: min(60vw, 320px); }
   .stage-title { font-size: 18px; }
   .stage-desc { font-size: 12px; }
 }
-@media (max-width: 480px) {
-  .phone-frame { width: 88vw; }
-  .recording-frame { width: 88vw; }
-  .focus-timer { font-size: 48px; }
-  .main-stage { padding: 12px; gap: 16px; }
+
+/* ===== 超小屏微调 ===== */
+@media (max-width: 360px) {
+  .stage-title { font-size: 14px; }
+  .stage-badge { font-size: 10px; padding: 3px 10px; }
+  .focus-timer { font-size: 44px; }
 }
 
 /* ===== 补充样式（app.js 动态生成的元素） ===== */
