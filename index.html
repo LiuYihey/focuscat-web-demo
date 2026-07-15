@@ -65,8 +65,8 @@
                   </div>
                   <img class="cat-fallback" id="catFallback" src="assets/cats/orange.png" alt="cat">
                   <!-- 双 video 交替播放，消除切换空窗 -->
-                  <video class="cat-video cat-video-a ready" id="catVideoA" muted playsinline preload="metadata"></video>
-                  <video class="cat-video cat-video-b" id="catVideoB" muted playsinline preload="metadata"></video>
+                  <video class="cat-video cat-video-a ready" id="catVideoA" muted playsinline preload="auto"></video>
+                  <video class="cat-video cat-video-b" id="catVideoB" muted playsinline preload="auto"></video>
                   <div class="affinity-float" id="affinityFloat"></div>
                 </div>
 
@@ -334,7 +334,7 @@
 
           <!-- ===== 全屏覆盖：专注模式 ===== -->
           <div class="fullscreen-overlay" id="focusScreen">
-            <video class="focus-video" id="focusVideo" muted playsinline preload="none"></video>
+            <video class="focus-video" id="focusVideo" muted playsinline preload="auto"></video>
             <button class="focus-back-btn" id="focusBackBtn">
               <span class="material-icons">arrow_back</span>
             </button>
