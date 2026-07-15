@@ -23,8 +23,9 @@
 
 html, body {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
@@ -47,16 +48,13 @@ body {
 /* ===== 单页左右对称布局 ===== */
 .main-stage {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 48px;
   padding: 20px 40px;
-  overflow: hidden;
-  /* 整体缩放至 90%，避免默认 100% 缩放时内容过大 */
-  transform: scale(0.9);
-  transform-origin: center center;
+  overflow: auto;
 }
 
 .stage-column {
@@ -115,7 +113,9 @@ body {
 /* ===== 手机外框（复用录屏 HTML 样式） ===== */
 .phone-frame {
   position: relative;
-  width: min(38vw, 340px);
+  /* 同时根据视口宽度和高度限制，确保在任何屏幕尺寸下都不会溢出 */
+  /* calc((100vh - 200px) * 9 / 19.5) = 留 200px 给标题+padding 后的最大允许宽度 */
+  width: min(38vw, 340px, calc((100vh - 200px) * 9 / 19.5));
   aspect-ratio: 9 / 19.5;
   background: #0D0D0E;
   border-radius: 54px;
@@ -1482,7 +1482,7 @@ body {
 }
 
 /* ===== 录屏页 ===== */
-.recording-frame { width: min(38vw, 340px); }
+.recording-frame { width: min(38vw, 340px, calc((100vh - 200px) * 9 / 19.5)); }
 .recording-video {
   position: absolute;
   inset: 0;
